@@ -1,0 +1,26 @@
+{% if message %}
+<script>
+    alert('{{ message }}')
+</script>
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+</head>
+<body>
+<H2>Register</H2>
+<form action='{% url 'register_result' %}' method='post'>
+    {% csrf_token %}
+    Restaurant Name: <input type="text" name="name"></input><br>
+    Phone: <input type="text" name="phone"></input><br>
+    Address: <input type="text" name="addr"></input><br>
+    Email: <input type="email" name="email"><br>
+    Password: <input type="password" name="passwd"><br>
+    <input type="submit" value="Register">
+</form>
+<button type="button" onclick="location.href='{% url 'login' %}'">Back</button>
+</body>
+</html>

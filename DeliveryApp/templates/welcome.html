@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Homepage
+{% endblock %}
+
+{% block header %}
+<H1>Welcome, {{name}}</H1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <a href="{% url 'create_dish' %}" class="btn btn-info" role="button" >Create Dish</a>
+  <a href="{% url 'logout' %}" class="btn btn-danger pull-right" role="button" >Logout</a>
+</div>
+<div class="container">
+</div>
+<div class="container">
+  <H3><b>Dishes</b></H3>
+</div>
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Dish Name</th>
+        <th>Flavor</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dish, detail in dishes %}
+      <tr>
+        <td>{{ dish }}</td>
+        <td>{{ detail.Flavor }}</td>
+        <td>{{ detail.Price }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
+{% endblock %}
