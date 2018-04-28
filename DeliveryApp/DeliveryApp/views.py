@@ -104,14 +104,17 @@ def create_dish(request, template_name):
         uid = current_user['users'][0]['localId']
     except:
         raise Http404
+
     if request.method == "POST":
         form = DishForm(data=request.POST)
         if form.is_valid():
             dish_name = form.cleaned_data.get("dish_name")
+            image = form.cleaned_data.get("url")
             ingredient = form.cleaned_data.get("ingredient") 
             flavor = form.cleaned_data.get("flavor")
             price = form.cleaned_data.get("price")
             data = {
+                "Image": image,
                 "Ingredient": ingredient,
                 "Flavor": flavor,
                 "Price": price

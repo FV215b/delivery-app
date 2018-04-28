@@ -14,6 +14,7 @@ class RegisterForm(forms.Form):
 
 class DishForm(forms.Form):
     dish_name = forms.CharField()
+    url = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'url'}))
     ingredient = forms.CharField(widget=forms.TextInput(attrs={'size': 40}))
     flavor = forms.CharField()
     price = forms.CharField() 
