@@ -18,7 +18,7 @@ Create Dish
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" class="btn btn-primary" value="Add Dish">
-    <a.href="{% url 'homepage' %}" class="btn btn-danger" role="button">Cancel</a>
+    <button type="button" class="btn btn-danger" onclick="location.href='{% url 'homepage' %}'">Cancel</button>
   </form>
 </div>
 {% endblock %}
