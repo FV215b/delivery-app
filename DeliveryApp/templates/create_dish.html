@@ -1,9 +1,4 @@
 {% extends 'base.html' %}
-{% if message %}
-<script>
-    alert('{{ message }}')
-</script>
-{% endif %}
 
 {% block title %}
 Create Dish
@@ -22,13 +17,8 @@ Create Dish
   <form action='{% url 'create_dish' %}' method='post'>
     {% csrf_token %}
     {{ form.as_p }}
-<!--    <p>Dish Name: <input type="text" name="name"></input></p>
-    <p>Ingredient: <input type="text" name="ingredient"></input></p>
-    <p>Flavor: <input type="text" name="flavor"></input></p>
-    <p>Price: <input type="text" name="price"></p>
--->
     <input type="submit" class="btn btn-primary" value="Add Dish">
-    <a.href="{% url 'welcome' %}" class="btn btn-danger" role="button">Cancel</a>
+    <a.href="{% url 'homepage' %}" class="btn btn-danger" role="button">Cancel</a>
   </form>
 </div>
 {% endblock %}

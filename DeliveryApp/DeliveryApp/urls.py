@@ -21,9 +21,9 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^login/$', views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', views.logout, {'template_name': 'logout.html'}, name='logout'),
-    url(r'^welcome/$', views.welcome, {'template_name': 'welcome.html'}, name='welcome'),
+    url(r'^homepage/$', views.homepage, {'template_name': 'homepage.html'}, name='homepage'),
     url(r'^register/$', views.register, {'template_name': 'register.html'}, name='register'),
     url(r'^create_dish/$', views.create_dish, {'template_name': 'create_dish.html'}, name='create_dish'),
 ]

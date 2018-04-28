@@ -31,8 +31,7 @@ def login(request, template_name):
                 message = "Incorrect username or password"
                 return render(request, template_name, {"message": message, "form": form})
             request.session['uid'] = str(user['idToken'])
-            print(request.session['uid'])
-            return HttpResponseRedirect(reverse('welcome'))
+            return HttpResponseRedirect(reverse('homepage'))
         else:
             message = "Invalid login info format"
             return render(request, template_name, {"message": message, "form": form})
@@ -40,9 +39,8 @@ def login(request, template_name):
         form = LoginForm()
         return render(request, template_name, {"form": form})
 
-def welcome(request, template_name):
+def homepage(request, template_name):
     id_token = request.session['uid']
-    print(id_token)
     current_user = authentication.get_account_info(id_token)
     uid = current_user['users'][0]['localId']
 
@@ -84,7 +82,7 @@ def register(request, template_name):
                 session_id = user['idToken']
                 request.session['uid'] = str(session_id)
                 database.child("Restaurants").child(user['localId']).child("Info").set(data)
-                return HttpResponseRedirect(reverse("welcome"))
+                return HttpResponseRedirect(reverse("homepage"))
             else:
                 message = "Repeated password is not same with password"
                 return render(request, template_name, {"message": message, "form": form})
@@ -115,7 +113,7 @@ def create_dish(request, template_name):
             current_user = authentication.get_account_info(id_token)
             uid = current_user['users'][0]['localId']
             database.child("Restaurants").child(uid).child('Dishes').child(dish_name).set(data)
-            return HttpResponseRedirect(reverse("welcome"))
+            return HttpResponseRedirect(reverse("homepage"))
         else:
             message = "Invalid dish info"
             return render(request, template_name, {"message": message, "form": form}) 
