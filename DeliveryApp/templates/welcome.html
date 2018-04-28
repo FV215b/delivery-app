@@ -28,13 +28,17 @@ Homepage
       </tr>
     </thead>
     <tbody>
-      {% for dish, detail in dishes %}
-      <tr>
-        <td>{{ dish }}</td>
-        <td>{{ detail.Flavor }}</td>
-        <td>{{ detail.Price }}</td>
-      </tr>
-      {% endfor %}
+      {% if no_dishes %}
+        <p><b>{{ no_dishes }}</b></p>
+      {% else %}
+        {% for dish, detail in dishes %}
+        <tr>
+          <td>{{ dish }}</td>
+          <td>{{ detail.Flavor }}</td>
+          <td>{{ detail.Price }}</td>
+        </tr>
+        {% endfor %}
+      {% endif %}
     </tbody>
   </table>
 </div>

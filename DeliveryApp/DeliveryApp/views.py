@@ -37,10 +37,11 @@ def welcome(request):
     username = database.child('Restaurants').child(user['localId']).child('Info').child('Name').get().val()
 
     dishes_orddict = database.child('Restaurants').child(user['localId']).child('Dishes').get().val()
-    dishes = list(dishes_orddict.items())
-    print(dishes)
-
-    return render(request, "welcome.html", {"name": username, "dishes": dishes})
+    if dishes_orddict is None:
+        return render(request, "welcome.html", {"name": username, "no_dishes": "So far, you don't have any dishes. Let's create one!"})
+    else:
+        dishes = list(dishes_orddict.items())
+        return render(request, "welcome.html", {"name": username, "dishes": dishes})
 
 def logout(request):
     auth.logout(request)
@@ -51,30 +52,32 @@ def register(request):
     if request.method == "POST":
         form = RegisterForm(data=request.POST)
         if form.is_valid():
-            name = form.cleaned_data.get("restaurant_name")
-            email = request.cleaned_data.get("email")
-            passwd1 = request.cleaned_data.get("password")
-            passwd2 = request.cleaned_data.get("repeat_password")
-            phone = request.cleaned_data.get("phone")
-            addr = request.cleaned_data.get("address")
+            name = form.cleaned_data["restaurant_name"]
+            email = form.cleaned_data["email"]
+            passwd1 = form.cleaned_data["password"]
+            passwd2 = form.cleaned_data["repeat_password"]
+            phone = form.cleaned_data["phone"]
+            addr = form.cleaned_data["address"]
             if passwd1 == passwd2:
                 try:
-                    user = authentication.create_user_with_email_and_password(email, passwd)
+                    user = authentication.create_user_with_email_and_password(email, passwd1)
                 except:
                     message = "Unable to create new user"
                     return render(request, "register.html", {"message": message, "form": form})
                 
                 data = {
                     "Name": name, 
-                    "Phone": phone, 
+                    "Phone": phone,
                     "Address": addr,
                     "Email": email
                 }
                 database.child("Restaurants").child(user['localId']).child("Info").set(data)
                 dishes_orddict = database.child('Restaurants').child(user['localId']).child('Dishes').get().val()
-                dishes = list(dishes_orddict.items())
-
-                return render(request, "welcome.html", {"name": name, "dishes": dishes})
+                if dishes_orddict is None:
+                    return render(request, "welcome.html", {"name": name, "no_dishes": "So far, you don't have any dishes. Let's create one!"})
+                else:
+                    dishes = list(dishes_orddict.items())
+                    return render(request, "welcome.html", {"name": name, "dishes": dishes})
             
             else:
                 message = "Repeated passworkd is not same with password"
