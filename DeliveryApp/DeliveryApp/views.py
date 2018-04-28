@@ -139,4 +139,4 @@ def dish_detail(request, template_name, dish_name):
    
     dish_orddict = database.child("Restaurants").child(uid).child('Dishes').child(dish_name).get().val()
     dish = list(dish_orddict.items())
-    render(request, template_name, {"dish_name": dish_name, "dish": dish})
+    return render(request, template_name, {"dish_name": dish_name, "dish": dish})

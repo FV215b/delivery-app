@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dish Detail
+{% endblock %}
+
+{% block header %}
+<H1>Dish Detail</H1>
+{% endblock %}
+
+{% block content %}
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h4>dish_name</h4></div>
+    <div class="panel-body">
+      {% for item in dish %}
+        {% if item.0 != 'Image' %}
+          <p><b>{{ item.0 }}:</b> {{ item.1 }}</p>  
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
