@@ -3,6 +3,8 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from collections import OrderedDict
+from django import forms
+from .forms import RegisterForm
 import pyrebase
 
 config = {
@@ -46,31 +48,44 @@ def logout(request):
     return render(request, "login.html")
 
 def register(request):
+    if request.method == "POST":
+        form = RegisterForm(data=request.POST)
+        if form.is_valid():
+            name = form.cleaned_data.get("restaurant_name")
+            email = request.cleaned_data.get("email")
+            passwd1 = request.cleaned_data.get("password")
+            passwd2 = request.cleaned_data.get("repeat_password")
+            phone = request.cleaned_data.get("phone")
+            addr = request.cleaned_data.get("address")
+            if passwd1 == passwd2:
+                try:
+                    user = authentication.create_user_with_email_and_password(email, passwd)
+                except:
+                    message = "Unable to create new user"
+                    return render(request, "register.html", {"message": message, "form": form})
+                
+                data = {
+                    "Name": name, 
+                    "Phone": phone, 
+                    "Address": addr,
+                    "Email": email
+                }
+                database.child("Restaurants").child(user['localId']).child("Info").set(data)
+                dishes_orddict = database.child('Restaurants').child(user['localId']).child('Dishes').get().val()
+                dishes = list(dishes_orddict.items())
 
-    return render(request, "register.html")
-
-def register_result(request):
-    name = request.POST.get("name")
-    email = request.POST.get("email")
-    passwd = request.POST.get("passwd")
-    phone = request.POST.get("phone")
-    address = request.POST.get("addr")
-    try:
-        user = authentication.create_user_with_email_and_password(email, passwd)
-    except:
-        message = "Unable to create new user"
-        return render(request, "register.html", {"message": message})
-    data = {
-        "Name": name, 
-        "Phone": phone, 
-        "Address": address
-    }
-    database.child("Restaurants").child(user['localId']).child("Info").set(data)
- 
-    dishes_orddict = database.child('Restaurants').child(user['localId']).child('Dishes').get().val()
-    dishes = list(dishes_orddict.items())
-
-    return render(request, "welcome.html", {"name": name, "dishes": dishes})
+                return render(request, "welcome.html", {"name": name, "dishes": dishes})
+            
+            else:
+                message = "Repeated passworkd is not same with password"
+                return render(request, "register.html", {"message": message, "form": form})
+        else:
+            message = "invalid registered information"
+            return render(request, "register.html", {"message": message, "form": form}) 
+    else:
+        form = RegisterForm()
+        return render(request, "register.html", {"form": form})
+        
 
 def create_dish(request):
     

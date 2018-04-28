@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^welcome/$', views.welcome, name='welcome'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^register_result/$', views.register_result, name='register_result'),
     url(r'^create_dish/$', views.create_dish, name='create_dish'),
     url(r'^post_dish/$', views.post_dish, name='post_dish'),
 ]

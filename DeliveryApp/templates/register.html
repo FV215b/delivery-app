@@ -1,26 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block header %}
+<H1>Register</H1>
+{% endblock %}
+
+{% block content %}
 {% if message %}
-<script>
-    alert('{{ message }}')
-</script>
+<script>alert('{{ message }}')</script>
 {% endif %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign In</title>
-</head>
-<body>
-<H2>Register</H2>
-<form action='{% url 'register_result' %}' method='post'>
+<div align="center">
+  <form action='{% url 'register' %}' method='post'>
     {% csrf_token %}
-    Restaurant Name: <input type="text" name="name"></input><br>
-    Phone: <input type="text" name="phone"></input><br>
-    Address: <input type="text" name="addr"></input><br>
-    Email: <input type="email" name="email"><br>
-    Password: <input type="password" name="passwd"><br>
-    <input type="submit" value="Register">
-</form>
-<button type="button" onclick="location.href='{% url 'login' %}'">Back</button>
-</body>
-</html>
+<!--    <p>Restaurant Name: <input type="text" placeholder="Enter restaurant name" name="name"></input></p>
+    <p>Phone: <input type="text" placeholder="Enter phone" name="phone"></input></p>
+    <p>Address: <input type="text" placeholder="Enter address" name="addr"></input></p>
+    <p>Email: <input type="email" placeholder="Enter Email" name="email"></p>
+    <p>Password: <input type="password" placeholder="Enter password" name="passwd"></p>
+    <p>Repeat Password: <input type="password" placeholder="Enter password again" name="repeat_passwd"></p>
+-->
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary" value="Register"></input>
+    <button type="button" class="btn btn-danger" onclick="location.href='{% url 'login' %}'">Back</button>
+  </form> 
+</div>
+{% endblock %}
