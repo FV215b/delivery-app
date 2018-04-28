@@ -14,13 +14,19 @@ Create Dish
 {% endblock %}
 
 {% block content %}
+{% if message %}
+<script>alert('{{ message }}')</script>
+{% endif %}
+
 <div align="center" class=container>
-  <form action='{% url 'post_dish' %}' method='post'>
+  <form action='{% url 'create_dish' %}' method='post'>
     {% csrf_token %}
-    <p>Dish Name: <input type="text" name="name"></input></p>
+    {{ form.as_p }}
+<!--    <p>Dish Name: <input type="text" name="name"></input></p>
     <p>Ingredient: <input type="text" name="ingredient"></input></p>
     <p>Flavor: <input type="text" name="flavor"></input></p>
     <p>Price: <input type="text" name="price"></p>
+-->
     <input type="submit" class="btn btn-primary" value="Add Dish">
     <a.href="{% url 'welcome' %}" class="btn btn-danger" role="button">Cancel</a>
   </form>

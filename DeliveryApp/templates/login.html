@@ -1,10 +1,4 @@
 {% extends 'base.html' %}
-{% if message %}
-<script>
-    alert('{{ message }}')
-</script>
-{% endif %}
-
 
 {% block title %}
 Login
@@ -15,11 +9,14 @@ Login
 {% endblock %}
 
 {% block content %}
+{% if message %}
+<script>alert('{{ message }}')</script>
+{% endif %}
+
 <div align="center" class="container">
-  <form action='{% url 'welcome' %}' method='post'>
+  <form action='{% url 'login' %}' method='post'>
     {% csrf_token %}
-    <p><b>Username:</b> <input type="email" name="email"></p>
-    <p><b>Password:</b> <input type="password" name="passwd"></p>
+    {{ form.as_p }}
     <input type="submit" class="btn btn-success" value="Login">
     <button type="button" onclick="location.href='{% url 'register' %}'" class="btn btn-primary">Register</button>
   </form>

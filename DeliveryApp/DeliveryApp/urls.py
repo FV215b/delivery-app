@@ -21,10 +21,9 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', views.login, name='login'),
-    url(r'^logout/$', views.logout, name='logout'),
-    url(r'^welcome/$', views.welcome, name='welcome'),
-    url(r'^register/$', views.register, name='register'),
-    url(r'^create_dish/$', views.create_dish, name='create_dish'),
-    url(r'^post_dish/$', views.post_dish, name='post_dish'),
+    url(r'^$', views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', views.logout, {'template_name': 'logout.html'}, name='logout'),
+    url(r'^welcome/$', views.welcome, {'template_name': 'welcome.html'}, name='welcome'),
+    url(r'^register/$', views.register, {'template_name': 'register.html'}, name='register'),
+    url(r'^create_dish/$', views.create_dish, {'template_name': 'create_dish.html'}, name='create_dish'),
 ]
