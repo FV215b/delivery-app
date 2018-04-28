@@ -13,12 +13,14 @@ Create Dish
 <script>alert('{{ message }}')</script>
 {% endif %}
 
-<div align="center" class=container>
+<div align="center">
   <form action='{% url 'create_dish' %}' method='post'>
     {% csrf_token %}
     {{ form.as_p }}
-    Image<input type="file" name="files[]" id="file">
-    <button type="button" onclick="uploadimage()">Upload</button><br>
+    <div>
+      <input type="file" name="files[]" id="file">
+      <button type="button" onclick="uploadimage()">Upload</button>
+    </div>
     <input type="submit" class="btn btn-primary" value="Add Dish">
     <button type="button" class="btn btn-danger" onclick="location.href='{% url 'homepage' %}'">Cancel</button>
   </form>

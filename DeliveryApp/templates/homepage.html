@@ -33,7 +33,7 @@ Homepage
       {% else %}
         {% for dish, detail in dishes %}
         <tr>
-          <td>{{ dish }}</td>
+          <td><a href="/dish_detail/{{ dish|urlencode }}">{{ dish }}</a></td>
           <td>{{ detail.Flavor }}</td>
           <td>{{ detail.Price }}</td>
         </tr>

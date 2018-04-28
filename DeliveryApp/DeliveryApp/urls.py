@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^login/$', views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', views.logout, {'template_name': 'logout.html'}, name='logout'),
-    url(r'^homepage/$', views.homepage, {'template_name': 'homepage.html'}, name='homepage'),
     url(r'^register/$', views.register, {'template_name': 'register.html'}, name='register'),
+    url(r'^homepage/$', views.homepage, {'template_name': 'homepage.html'}, name='homepage'),
     url(r'^create_dish/$', views.create_dish, {'template_name': 'create_dish.html'}, name='create_dish'),
+    url(r'^dish_detail/(?P<dish_name>.+)', views.dish_detail, {'template_name': 'dish_detail.html'}, name='dish_detail'),
 ]

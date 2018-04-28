@@ -5,7 +5,7 @@ from django.urls import reverse
 from collections import OrderedDict
 from django import forms
 from .forms import RegisterForm, LoginForm, DishForm
-import pyrebase
+import pyrebase, urllib
 
 config = {
     'apiKey': "AIzaSyDIbRYC4mXpEcqZSt626i_BpmzRJeWTk5o",
@@ -109,7 +109,7 @@ def create_dish(request, template_name):
         form = DishForm(data=request.POST)
         if form.is_valid():
             dish_name = form.cleaned_data.get("dish_name")
-            image = form.cleaned_data.get("url")
+            image = form.cleaned_data.get("image")
             ingredient = form.cleaned_data.get("ingredient") 
             flavor = form.cleaned_data.get("flavor")
             price = form.cleaned_data.get("price")
@@ -128,3 +128,15 @@ def create_dish(request, template_name):
         form = DishForm()
         return render(request, template_name, {"form": form})
 
+def dish_detail(request, template_name, dish_name):
+    try:
+        id_token = request.session['uid']
+        current_user = authentication.get_account_info(id_token)
+        uid = current_user['users'][0]['localId']
+    except:
+        raise Http404
+    dish_name = urllib.parse.unquote(dish_name)
+   
+    dish_orddict = database.child("Restaurants").child(uid).child('Dishes').child(dish_name).get().val()
+    dish = list(dish_orddict.items())
+    render(request, template_name, {"dish_name": dish_name, "dish": dish})
