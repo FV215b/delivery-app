@@ -15,7 +15,9 @@ Dish Detail
     <div class="panel-body">
       {% for item in dish %}
         {% if item.0 != 'Image' %}
-          <p><b>{{ item.0 }}:</b> {{ item.1 }}</p>  
+          <p><b>{{ item.0 }}:</b> {{ item.1 }}</p>
+        {% else %}
+          <img src="{{ item.1 }}" style="float:right; margin-right:50px" width="20%" height="20%">
         {% endif %}
       {% endfor %}
     </div>
