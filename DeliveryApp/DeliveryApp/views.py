@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib import auth
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from collections import OrderedDict
 from django import forms
@@ -40,9 +40,12 @@ def login(request, template_name):
         return render(request, template_name, {"form": form})
 
 def homepage(request, template_name):
-    id_token = request.session['uid']
-    current_user = authentication.get_account_info(id_token)
-    uid = current_user['users'][0]['localId']
+    try:
+        id_token = request.session['uid']
+        current_user = authentication.get_account_info(id_token)
+        uid = current_user['users'][0]['localId']
+    except:
+        raise Http404
 
     username = database.child('Restaurants').child(uid).child('Info').child('Name').get().val()
     dishes_orddict = database.child('Restaurants').child(uid).child('Dishes').get().val()
@@ -95,6 +98,12 @@ def register(request, template_name):
         
 
 def create_dish(request, template_name):
+    try:
+        id_token = request.session['uid']
+        current_user = authentication.get_account_info(id_token)
+        uid = current_user['users'][0]['localId']
+    except:
+        raise Http404
     if request.method == "POST":
         form = DishForm(data=request.POST)
         if form.is_valid():
@@ -102,16 +111,11 @@ def create_dish(request, template_name):
             ingredient = form.cleaned_data.get("ingredient") 
             flavor = form.cleaned_data.get("flavor")
             price = form.cleaned_data.get("price")
-    
             data = {
                 "Ingredient": ingredient,
                 "Flavor": flavor,
                 "Price": price
             }
-
-            id_token = request.session['uid']
-            current_user = authentication.get_account_info(id_token)
-            uid = current_user['users'][0]['localId']
             database.child("Restaurants").child(uid).child('Dishes').child(dish_name).set(data)
             return HttpResponseRedirect(reverse("homepage"))
         else:
