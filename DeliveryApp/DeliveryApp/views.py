@@ -168,10 +168,12 @@ def edit_dish(request, template_name, dish_id):
                 "Price": price
             }
             database.child("Restaurants").child(uid).child('Dishes').child(dish_id).update(data)
-            return HttpResponseRedirect(reverse("homepage"))
+            return HttpResponseRedirect(reverse("dish_detail", args=(dish_id,)))
         else:
             message = "Invalid dish info"
             return render(request, template_name, {"dish_id": dish_id, "message": message, "form": form}) 
     else:
-        form = DishForm()
+        dish_orddict = database.child("Restaurants").child(uid).child('Dishes').child(dish_id).get().val()
+        dish = dict(list(dish_orddict.items()))
+        form = DishForm({"dish_name": dish["Name"], "image": dish["Image"], "ingredient": dish["Ingredient"], "flavor": dish["Flavor"], "price": dish["Price"]})
         return render(request, template_name, {"dish_id": dish_id, "form": form})

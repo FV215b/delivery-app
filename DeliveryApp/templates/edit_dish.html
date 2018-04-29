@@ -18,7 +18,7 @@ Edit Dish
     {% csrf_token %}
     {{ form.as_p }}
     <div>
-      <input type="file" name="files[]" id="file" required>
+      <input type="file" name="files[]" id="file">
       <button type="button" onclick="uploadimage()">Upload</button>
     </div>
     <input type="submit" class="btn btn-primary" value="Save">
