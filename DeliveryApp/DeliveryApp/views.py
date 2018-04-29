@@ -49,12 +49,20 @@ def homepage(request, template_name):
 
     info_orddict = database.child('Restaurants').child(uid).child('Info').get().val()
     info = dict(list(info_orddict.items()))
+    context = {"info": info}
     dishes_orddict = database.child('Restaurants').child(uid).child('Dishes').get().val()
     if dishes_orddict is None:
-        return render(request, template_name, {"info": info, "no_dishes": "So far, you don't have any dishes. Let's create one!"})
+        context["no_dishes"] = "So far, you don't have any dishes. Let's create one!"
     else:
         dishes = list(dishes_orddict.items())
-        return render(request, template_name, {"info": info, "dishes": dishes})
+        context["dishes"] = dishes
+    orders_orddict = database.child('Restaurants').child(uid).child('Orders').get().val()
+    if orders_orddict is None:
+        context["no_orders"] = "So far, you don't have any orders. Keep waiting!"
+    else:
+        orders = list(orders_orddict.items())
+        context["orders"] = orders
+    return render(request, template_name, context)
 
 def logout(request, template_name):
     auth.logout(request)
@@ -194,5 +202,16 @@ def delete_dish(request, template_name, dish_id):
     database.child("Restaurants").child(uid).child('Dishes').child(dish_id).remove()
     return render(request, template_name, {"dish_name": dish["Name"]})
 
-
-
+def order_detail(request, template_name, order_id):
+    try:
+        id_token = request.session['uid']
+        current_user = authentication.get_account_info(id_token)
+        uid = current_user['users'][0]['localId']
+    except:
+        raise Http404
+    #order_id = urllib.parse.unquote(order_id)
+        
+    order_orddict = database.child("Restaurants").child(uid).child('Orders').child(order_id).get().val()
+    order = dict(list(order_orddict.items()))
+    order['order_id'] = order_id
+    return render(request, template_name, order)

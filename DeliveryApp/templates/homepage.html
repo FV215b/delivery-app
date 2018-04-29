@@ -15,8 +15,6 @@ Homepage
   <a href="{% url 'logout' %}" class="btn btn-danger pull-right" role="button" >Logout</a>
 </div>
 <div class="container">
-</div>
-<div class="container">
   <H3><b>Dishes</b></H3>
 </div>
 <div class="container">
@@ -44,7 +42,36 @@ Homepage
       {% endif %}
     </tbody>
   </table>
+</div><br>
+<div class="container">
+  <H3><b>Orders</b></H3>
 </div>
-</body>
-</html>
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>SerialNum</th>
+        <th>Order Time</th>
+        <th>Customer Name</th>
+        <th>Status</th>
+        <th>Detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if no_orders %}
+        <p><b>{{ no_orders }}</b></p>
+      {% else %}
+        {% for id, detail in orders %}
+        <tr>
+          <td>{{ detail.Serial }}</td>
+          <td>{{ detail.Time }}</td>
+          <td>{{ detail.Customer }}</td>
+          <td>{{ detail.Status }}</td>
+          <td><a href="{% url 'order_detail' id %}">See detail</a><td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

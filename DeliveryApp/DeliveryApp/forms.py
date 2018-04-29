@@ -18,4 +18,4 @@ class DishForm(forms.Form):
     ingredient = forms.CharField(widget=forms.TextInput(attrs={'size': 40}))
     flavor = forms.CharField()
     price = forms.CharField() 
-    
+

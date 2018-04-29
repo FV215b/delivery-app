@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^edit_dish/(?P<dish_id>[\w\-]+)/$', views.edit_dish, {'template_name': 'edit_dish.html'}, name='edit_dish'),
     url(r'^delete_dish/(?P<dish_id>[\w\-]+)/$', views.delete_dish, {'template_name': 'delete_dish.html'}, name='delete_dish'),
     url(r'^dish_detail/(?P<dish_id>[\w\-]+)/$', views.dish_detail, {'template_name': 'dish_detail.html'}, name='dish_detail'),
+    url(r'^order_detail/(?P<order_id>[\w\-]+)/$', views.order_detail, {'template_name': 'order_detail.html'}, name='order_detail'),
 ]
