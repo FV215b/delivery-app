@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Dish
+{% endblock %}
+
+{% block header %}
+<H1>Edit Dish</H1>
+{% endblock %}
+
+{% block content %}
+{% if message %}
+<script>alert('{{ message }}')</script>
+{% endif %}
+
+<div align="center">
+  <form action='{% url 'edit_dish' dish_id %}' method='post'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div>
+      <input type="file" name="files[]" id="file" required>
+      <button type="button" onclick="uploadimage()">Upload</button>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Save">
+    <a href="{% url 'dish_detail' dish_id %}" class="btn btn-danger">Cancel</a>
+  </form>
+</div>
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  var config = {
+    apiKey: "AIzaSyDIbRYC4mXpEcqZSt626i_BpmzRJeWTk5o",
+    authDomain: "delivery-app-9167d.firebaseapp.com",
+    databaseURL: "https://delivery-app-9167d.firebaseio.com",
+    projectId: "delivery-app-9167d",
+    storageBucket: "delivery-app-9167d.appspot.com",
+    messagingSenderId: "107413486182"
+  };
+  firebase.initializeApp(config);
+  
+  function uploadimage() {
+    var storage = firebase.storage();
+    var storageRef = storage.ref();
+    var file = document.getElementById("file").files[0];
+    var uploadTask = storageRef.child(file.name).put(file);
+    
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on('state_changed',
+      function(snapshot) {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+        }
+      }, function(error) {
+        
+      }, function() {
+        // Upload completed successfully, now we can get the download URL
+        var downloadURL = uploadTask.snapshot.downloadURL;
+        document.getElementById("url").value = downloadURL;
+        console.log(downloadURL);
+        alert("File upload successfully");
+      }
+    );
+  }
+</script>
+{% endblock %}

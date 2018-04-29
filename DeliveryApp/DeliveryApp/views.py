@@ -114,12 +114,13 @@ def create_dish(request, template_name):
             flavor = form.cleaned_data.get("flavor")
             price = form.cleaned_data.get("price")
             data = {
+                "Name": dish_name,
                 "Image": image,
                 "Ingredient": ingredient,
                 "Flavor": flavor,
                 "Price": price
             }
-            database.child("Restaurants").child(uid).child('Dishes').child(dish_name).set(data)
+            database.child("Restaurants").child(uid).child('Dishes').push(data)
             return HttpResponseRedirect(reverse("homepage"))
         else:
             message = "Invalid dish info"
@@ -128,15 +129,49 @@ def create_dish(request, template_name):
         form = DishForm()
         return render(request, template_name, {"form": form})
 
-def dish_detail(request, template_name, dish_name):
+def dish_detail(request, template_name, dish_id):
     try:
         id_token = request.session['uid']
         current_user = authentication.get_account_info(id_token)
         uid = current_user['users'][0]['localId']
     except:
         raise Http404
-    dish_name = urllib.parse.unquote(dish_name)
+    #dish_id = urllib.parse.unquote(dish_id)
    
-    dish_orddict = database.child("Restaurants").child(uid).child('Dishes').child(dish_name).get().val()
-    dish = list(dish_orddict.items())
-    return render(request, template_name, {"dish_name": dish_name, "dish": dish})
+    dish_orddict = database.child("Restaurants").child(uid).child('Dishes').child(dish_id).get().val()
+    dish = dict(list(dish_orddict.items()))
+    dish['dish_id'] = dish_id
+    return render(request, template_name, dish)
+
+def edit_dish(request, template_name, dish_id):
+    try:
+        id_token = request.session['uid']
+        current_user = authentication.get_account_info(id_token)
+        uid = current_user['users'][0]['localId']
+    except:
+        raise Http404
+    #dish_id = urllib.parse.unquote(dish_id)
+   
+    if request.method == "POST":
+        form = DishForm(data=request.POST)
+        if form.is_valid():
+            dish_name = form.cleaned_data.get("dish_name")
+            image = form.cleaned_data.get("image")
+            ingredient = form.cleaned_data.get("ingredient") 
+            flavor = form.cleaned_data.get("flavor")
+            price = form.cleaned_data.get("price")
+            data = {
+                "Name": dish_name,
+                "Image": image,
+                "Ingredient": ingredient,
+                "Flavor": flavor,
+                "Price": price
+            }
+            database.child("Restaurants").child(uid).child('Dishes').child(dish_id).update(data)
+            return HttpResponseRedirect(reverse("homepage"))
+        else:
+            message = "Invalid dish info"
+            return render(request, template_name, {"dish_id": dish_id, "message": message, "form": form}) 
+    else:
+        form = DishForm()
+        return render(request, template_name, {"dish_id": dish_id, "form": form})

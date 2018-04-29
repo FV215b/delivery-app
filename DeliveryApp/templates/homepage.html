@@ -25,17 +25,19 @@ Homepage
         <th>Dish Name</th>
         <th>Flavor</th>
         <th>Price</th>
+        <th>Detail</th>
       </tr>
     </thead>
     <tbody>
       {% if no_dishes %}
         <p><b>{{ no_dishes }}</b></p>
       {% else %}
-        {% for dish, detail in dishes %}
+        {% for id, detail in dishes %}
         <tr>
-          <td><a href="/dish_detail/{{ dish|urlencode }}">{{ dish }}</a></td>
+          <td>{{ detail.Name }}</td>
           <td>{{ detail.Flavor }}</td>
           <td>{{ detail.Price }}</td>
+          <td><a href="{% url 'dish_detail' id %}">See detail</a><td>
         </tr>
         {% endfor %}
       {% endif %}
