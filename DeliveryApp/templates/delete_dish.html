@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Delete Successfully
+{% endblock %}
+
+{% block header %}
+<H3>You have successfully deleted dish "{{ dish_name }}"</H3>
+{% endblock %}
+
+{% block content %}
+<div align="center">
+  <a href="{% url 'create_dish' %}" class="btn btn-info" role="button">Create a new dish</a>
+  <a href="{% url 'homepage' %}" class="btn btn-default" role="button">Back to homepage</a>
+</div>
+{% endblock %}

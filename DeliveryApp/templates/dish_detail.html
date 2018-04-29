@@ -18,6 +18,7 @@ Dish Detail
       <p><b>Flavor: </b>{{ Flavor }}</p>
       <p><b>Price: </b>{{ Price }}</p>
       <a href="{% url 'edit_dish' dish_id %}" class="btn btn-primary">Edit</a>
+      <a href="{% url 'delete_dish' dish_id %}" class="btn btn-danger">Delete</a>
       <a href="{% url 'homepage' %}" class="btn btn-default">Back</a>
     </div>
   </div>

@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^homepage/$', views.homepage, {'template_name': 'homepage.html'}, name='homepage'),
     url(r'^create_dish/$', views.create_dish, {'template_name': 'create_dish.html'}, name='create_dish'),
     url(r'^edit_dish/(?P<dish_id>[\w\-]+)/$', views.edit_dish, {'template_name': 'edit_dish.html'}, name='edit_dish'),
+    url(r'^delete_dish/(?P<dish_id>[\w\-]+)/$', views.delete_dish, {'template_name': 'delete_dish.html'}, name='delete_dish'),
     url(r'^dish_detail/(?P<dish_id>[\w\-]+)/$', views.dish_detail, {'template_name': 'dish_detail.html'}, name='dish_detail'),
 ]
