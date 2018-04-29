@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from collections import OrderedDict
 from django import forms
-from .forms import RegisterForm, LoginForm, DishForm
+from .forms import RegisterForm, LoginForm, DishForm, StatusForm
 import pyrebase, urllib
 
 config = {
@@ -210,8 +210,18 @@ def order_detail(request, template_name, order_id):
     except:
         raise Http404
     #order_id = urllib.parse.unquote(order_id)
-        
+    
     order_orddict = database.child("Restaurants").child(uid).child('Orders').child(order_id).get().val()
     order = dict(list(order_orddict.items()))
+    
+    if request.method == "POST":
+        form = StatusForm(data=request.POST)
+        if form.is_valid():
+            update_status = form.cleaned_data.get('update_status')
+            print(update_status)
+            order["Status"] = int(update_status)
+            database.child("Restaurants").child(uid).child('Orders').child(order_id).update(order)
+            return HttpResponseRedirect(reverse("order_detail", args=(order_id,)))
     order['order_id'] = order_id
+    order['form'] = StatusForm()
     return render(request, template_name, order)

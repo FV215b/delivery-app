@@ -18,9 +18,10 @@ Homepage
   <H3><b>Dishes</b></H3>
 </div>
 <div class="container">
-  <table class="table table-hover">
+  <table class="table table-hover table-responsive table-striped">
     <thead>
       <tr>
+        <th>#</th>
         <th>Dish Name</th>
         <th>Flavor</th>
         <th>Price</th>
@@ -33,6 +34,7 @@ Homepage
       {% else %}
         {% for id, detail in dishes %}
         <tr>
+          <td>{{ forloop.counter }}</td>
           <td>{{ detail.Name }}</td>
           <td>{{ detail.Flavor }}</td>
           <td>{{ detail.Price }}</td>
@@ -47,7 +49,7 @@ Homepage
   <H3><b>Orders</b></H3>
 </div>
 <div class="container">
-  <table class="table table-hover">
+  <table class="table table-hover table-responsive table-striped">
     <thead>
       <tr>
         <th>SerialNum</th>

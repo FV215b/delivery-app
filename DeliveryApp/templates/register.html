@@ -10,7 +10,9 @@ Register
 
 {% block content %}
 {% if message %}
-<script>alert('{{ message }}')</script>
+<div class="alert alert-danger">
+  <strong>Error! </strong> {{ message }}
+</div>
 {% endif %}
 
 <div align="center">
