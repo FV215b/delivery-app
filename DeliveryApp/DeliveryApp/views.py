@@ -5,7 +5,7 @@ from django.urls import reverse
 from collections import OrderedDict
 from django import forms
 from .forms import RegisterForm, LoginForm, DishForm, StatusForm
-import pyrebase, urllib
+import pyrebase, urllib, os
 
 config = {
     'apiKey': "AIzaSyDIbRYC4mXpEcqZSt626i_BpmzRJeWTk5o",
@@ -20,6 +20,7 @@ authentication = firebase.auth()
 database = firebase.database()
 
 def login(request, template_name):
+    print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     if request.method == "POST":
         form = LoginForm(data=request.POST)
         if form.is_valid():
@@ -33,8 +34,7 @@ def login(request, template_name):
             request.session['uid'] = str(user['idToken'])
             return HttpResponseRedirect(reverse('homepage'))
         else:
-            message = "Invalid login info format"
-            return render(request, template_name, {"message": message, "form": form})
+            return render(request, template_name, {"form": form})
     else:
         form = LoginForm()
         return render(request, template_name, {"form": form})
@@ -74,33 +74,27 @@ def register(request, template_name):
         if form.is_valid():
             name = form.cleaned_data["restaurant_name"]
             email = form.cleaned_data["email"]
-            passwd1 = form.cleaned_data["password"]
-            passwd2 = form.cleaned_data["repeat_password"]
+            password = form.cleaned_data["password"]
             phone = form.cleaned_data["phone"]
             addr = form.cleaned_data["address"]
-            if passwd1 == passwd2:
-                try:
-                    user = authentication.create_user_with_email_and_password(email, passwd1)
-                except:
-                    message = "Unable to create new user"
-                    return render(request, template_name, {"message": message, "form": form})
-                
-                data = {
-                    "Name": name, 
-                    "Phone": phone,
-                    "Address": addr,
-                    "Email": email
-                }
-                session_id = user['idToken']
-                request.session['uid'] = str(session_id)
-                database.child("Restaurants").child(user['localId']).child("Info").set(data)
-                return HttpResponseRedirect(reverse("homepage"))
-            else:
-                message = "Repeated password is not same with password"
+            try:
+                user = authentication.create_user_with_email_and_password(email, password)
+            except:
+                message = "Unable to create new user"
                 return render(request, template_name, {"message": message, "form": form})
+            data = {
+                "Name": name, 
+                "Phone": phone,
+                "Address": addr,
+                "Email": email
+            }
+            session_id = user['idToken']
+            request.session['uid'] = str(session_id)
+            database.child("Restaurants").child(user['localId']).child("Info").set(data)
+            return HttpResponseRedirect(reverse("homepage"))
         else:
-            message = "Invalid register info format"
-            return render(request, template_name, {"message": message, "form": form}) 
+            print(form)
+            return render(request, template_name, {"form": form}) 
     else:
         form = RegisterForm()
         return render(request, template_name, {"form": form})
@@ -132,8 +126,7 @@ def create_dish(request, template_name):
             database.child("Restaurants").child(uid).child('Dishes').push(data)
             return HttpResponseRedirect(reverse("homepage"))
         else:
-            message = "Invalid dish info"
-            return render(request, template_name, {"message": message, "form": form}) 
+            return render(request, template_name, {"form": form}) 
     else:
         form = DishForm()
         return render(request, template_name, {"form": form})
@@ -179,8 +172,7 @@ def edit_dish(request, template_name, dish_id):
             database.child("Restaurants").child(uid).child('Dishes').child(dish_id).update(data)
             return HttpResponseRedirect(reverse("dish_detail", args=(dish_id,)))
         else:
-            message = "Invalid dish info"
-            return render(request, template_name, {"dish_id": dish_id, "message": message, "form": form}) 
+            return render(request, template_name, {"dish_id": dish_id, "form": form}) 
     else:
         dish_orddict = database.child("Restaurants").child(uid).child('Dishes').child(dish_id).get().val()
         dish = dict(list(dish_orddict.items()))

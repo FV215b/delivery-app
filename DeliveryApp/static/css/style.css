@@ -6,7 +6,7 @@ th {
 }
 .panel-heading {
   font-size: 15px;
-  font-weight:bold;
+  font-weight: bold;
 }
 input {
   margin-left: 5px;
@@ -14,5 +14,8 @@ input {
 }
 .panel-footer {
   font-size: 15px;
-  font-weight:bold;
+  font-weight: bold;
+}
+ul.errorlist {
+  display: none;
 }

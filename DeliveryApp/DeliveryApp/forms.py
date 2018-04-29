@@ -12,12 +12,20 @@ class RegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput())
     repeat_password = forms.CharField(widget=forms.PasswordInput())
 
+    def clean(self):
+        cleaned_data = super(RegisterForm, self).clean()
+        password = cleaned_data.get('password')
+        repeat_password = cleaned_data.get('repeat_password')
+
+        if password != repeat_password:
+            raise forms.ValidationError("Password and Repeat password do not match.")
+
 class DishForm(forms.Form):
     dish_name = forms.CharField()
     image = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'url'}))
     ingredient = forms.CharField(widget=forms.TextInput(attrs={'size': 40}))
     flavor = forms.CharField()
-    price = forms.FloatField(widget=forms.NumberInput()) 
+    price = forms.FloatField(widget=forms.NumberInput(attrs={'step': '0.01'})) 
 
 class StatusForm(forms.Form):
     CHOICES = [

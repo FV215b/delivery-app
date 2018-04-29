@@ -9,15 +9,25 @@ Create Dish
 {% endblock %}
 
 {% block content %}
-{% if message %}
-<div class="alert alert-danger">
-  <strong>Error! </strong> {{ message }}
-</div>
-{% endif %}
-
 <div align="center">
   <form action='{% url 'create_dish' %}' method='post'>
     {% csrf_token %}
+    {% if form.errors %}
+      {% for field in form %}
+        {% for error in field.errors %}
+          <div class="alert alert-danger alert-dismissible fade in">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error! </strong> {{ error|escape }}
+          </div>
+        {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <div class="alert alert-danger alert-dismissible fade in">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Error! </strong> {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
     {{ form.as_p }}
     <div>
       <input type="file" name="files[]" id="file" required>
