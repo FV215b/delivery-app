@@ -47,13 +47,14 @@ def homepage(request, template_name):
     except:
         raise Http404
 
-    username = database.child('Restaurants').child(uid).child('Info').child('Name').get().val()
+    info_orddict = database.child('Restaurants').child(uid).child('Info').get().val()
+    info = dict(list(info_orddict.items()))
     dishes_orddict = database.child('Restaurants').child(uid).child('Dishes').get().val()
     if dishes_orddict is None:
-        return render(request, template_name, {"name": username, "no_dishes": "So far, you don't have any dishes. Let's create one!"})
+        return render(request, template_name, {"info": info, "no_dishes": "So far, you don't have any dishes. Let's create one!"})
     else:
         dishes = list(dishes_orddict.items())
-        return render(request, template_name, {"name": username, "dishes": dishes})
+        return render(request, template_name, {"info": info, "dishes": dishes})
 
 def logout(request, template_name):
     auth.logout(request)

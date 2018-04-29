@@ -5,7 +5,8 @@ Homepage
 {% endblock %}
 
 {% block header %}
-<H1>Welcome, {{name}}</H1>
+<H1>Welcome, {{ info.Name }}</H1><br>
+<p>{{ info.Address }}  |  {{ info.Phone }}  |  {{info.Email}}</p>
 {% endblock %}
 
 {% block content %}
