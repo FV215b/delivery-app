@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Order Detail
+{% endblock %}
+
+{% block header %}
+<H1>Order Detail</H1>
+{% endblock %}
+
+{% block content %}
+<div class="panel-group">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><h4>Serial Number: {{ Serial }}</h4></div>
+    <div class="panel-body">
+      <p><b>Order Time: </b>{{ Time }}</p>
+      <p><b>Order Content: </b>{{ Food }}</p>
+      <p><b>Extra Requirement: </b>{{ Requirement }}</p> 
+    </div>
+    <div class="panel-body">
+      <p><b>Customer Name: </b>{{ Customer }}</p>
+      <p><b>Delivery Address: </b>{{ Address }}</p>
+      {% if Status == 0 %}
+        <p><b>Status: </b>Confirmed</p> 
+      {% elif Status == 1 %}
+        <p><b>Status: </b>Preparing</p> 
+      {% elif Status == 2 %}
+        <p><b>Status: </b>Delivering</p> 
+      {% else %}
+        <p><b>Status: </b>Delivered</p> 
+      {% endif %}
+    </div>
+    <div class="panel-footer">
+      <H4><b>Total Price: </b>{{ Price }}</H4>
+    </div>
+  </div>
+</div>
+{% endblock %}
