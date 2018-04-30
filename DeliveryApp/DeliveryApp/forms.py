@@ -6,7 +6,7 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.Form):
     restaurant_name = forms.CharField(widget=forms.TextInput(attrs={'size': 30}))
-    phone = forms.DecimalField(widget=forms.NumberInput())
+    phone = forms.IntegerField(widget=forms.NumberInput())
     address = forms.CharField()
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
